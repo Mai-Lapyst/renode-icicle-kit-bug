@@ -7,21 +7,20 @@ Resource                      ${RENODEKEYWORDS}
 
 *** Variables ***
 ${SCRIPT}                     ${CURDIR}/test.resc
-${UART}                       sysbus.uart
-
+${MMUART0}                    sysbus.mmuart0
+${MMUART1}                    sysbus.mmuart1
 
 *** Keywords ***
 Load Script
     Execute Script            ${SCRIPT}
-    Create Terminal Tester    ${UART}
+    Create Terminal Tester    ${MMUART1}
+    Create Log Tester         0
 
 
 *** Test Cases ***
 Should Run Test Case
     Load Script
     Start Emulation
-    Wait For Prompt On Uart     uart:~$
-    Write Line To Uart
-    Wait For Prompt On Uart     uart:~$
-    Write Line To Uart          demo ping
-    Wait For Line On Uart       pong
+
+    Wait For Prompt On Uart     Starting kernel ...
+    Should Not Be In Log        Trying to execute code outside RAM or ROM   30
